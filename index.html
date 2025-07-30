@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My YouTube Music Player</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>🎵 My YouTube Music Player</h1>
+      <div class="now-playing-container">
+        <div class="now-playing-text" id="nowPlaying">現在再生中 ▶</div>
+      </div>
+      <div class="url-input">
+        <input type="text" id="youtubeUrl" placeholder="YouTubeのURLを入力" />
+        <button onclick="addVideo()">登録</button>
+      </div>
+    </header>
+
+    <main>
+      <div id="player"></div>
+
+      <div class="player-controls">
+        <button onclick="prevVideo()">⏮️ 前</button>
+        <button onclick="togglePlay()">▶️/⏸️ 再生/停止</button>
+        <button onclick="nextVideo()">⏭️ 次</button>
+        <button onclick="shufflePlaylist()">🔀 シャッフル</button>
+        <button onclick="toggleLoop()">🔁 ループ</button>
+      </div>
+
+      <div id="notification"></div>
+      <ul id="playlist"></ul>
+    </main>
+
+    <footer>
+      made by <a href="https://github.com/h1ro223" target="_blank">hiro/ヒロ</a>
+    </footer>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>
