@@ -4,19 +4,18 @@ let currentIndex = 0;
 let isLooping = false;
 let isShuffling = false;
 
+// YouTube iframe APIの読み込み後に呼ばれる
 function onYouTubeIframeAPIReady() {
   player = new YT.Player("player", {
-    height: "360",
-    width: "640",
+    height: "200",
+    width: "100%",
     videoId: playlist[currentIndex]?.id || "",
     events: {
       onReady: () => {
-        if (playlist.length > 0) {
-          loadVideo(currentIndex);
-        }
+        if (playlist.length > 0) loadVideo(currentIndex);
       },
-      onStateChange: onPlayerStateChange,
-    },
+      onStateChange: onPlayerStateChange
+    }
   });
 }
 
@@ -30,16 +29,42 @@ function onPlayerStateChange(event) {
   }
 }
 
+// ---- 入力欄：自動ペースト補助 ----
+document.addEventListener("DOMContentLoaded", () => {
+  const urlInput = document.getElementById("youtubeUrl");
+  urlInput.addEventListener("focus", async function () {
+    // モバイル対応: クリップボード自動貼り付け (ユーザーが許可してれば)
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text && /^https?:\/\/(www\.)?youtube\.com|youtu\.be\//.test(text) && !urlInput.value) {
+          urlInput.value = text;
+        }
+      } catch (e) {}
+    }
+  });
+});
+
+// 手動ペーストボタン
+function pasteUrl() {
+  const urlInput = document.getElementById("youtubeUrl");
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.readText().then(text => {
+      urlInput.value = text;
+    });
+  } else {
+    alert("クリップボードAPIが使えません。手動で貼り付けてください。");
+  }
+}
+
 function addVideo() {
   const url = document.getElementById("youtubeUrl").value.trim();
   const videoId = extractVideoID(url);
   if (!videoId) return alert("無効なURLです");
 
-  fetch(
-    `https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`
-  )
-    .then((res) => res.json())
-    .then((data) => {
+  fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`)
+    .then(res => res.json())
+    .then(data => {
       const title = data.title || videoId;
       playlist.push({ id: videoId, title });
       localStorage.setItem("playlist", JSON.stringify(playlist));
@@ -63,10 +88,10 @@ function renderPlaylist() {
     li.innerHTML = `
       <span>${video.title}</span>
       <div class="btn-group">
-        <button onclick="moveUp(${i})">↑</button>
-        <button onclick="moveDown(${i})">↓</button>
-        <button onclick="window.open('https://www.youtube.com/watch?v=${video.id}', '_blank')">▶</button>
-        <button onclick="removeVideo(${i})">削除</button>
+        <button onclick="moveUp(${i})" title="上へ">↑</button>
+        <button onclick="moveDown(${i})" title="下へ">↓</button>
+        <button onclick="window.open('https://www.youtube.com/watch?v=${video.id}', '_blank')" title="YouTubeで開く">▶</button>
+        <button onclick="removeVideo(${i})" title="削除">削除</button>
       </div>
     `;
     list.appendChild(li);
@@ -130,20 +155,14 @@ function toggleLoop() {
 
 function moveUp(index) {
   if (index <= 0) return;
-  [playlist[index - 1], playlist[index]] = [
-    playlist[index],
-    playlist[index - 1],
-  ];
+  [playlist[index - 1], playlist[index]] = [playlist[index], playlist[index - 1]];
   localStorage.setItem("playlist", JSON.stringify(playlist));
   renderPlaylist();
 }
 
 function moveDown(index) {
   if (index >= playlist.length - 1) return;
-  [playlist[index], playlist[index + 1]] = [
-    playlist[index + 1],
-    playlist[index],
-  ];
+  [playlist[index], playlist[index + 1]] = [playlist[index + 1], playlist[index]];
   localStorage.setItem("playlist", JSON.stringify(playlist));
   renderPlaylist();
 }
@@ -151,7 +170,7 @@ function moveDown(index) {
 function showNotification(message) {
   const note = document.getElementById("notification");
   note.textContent = message;
-  setTimeout(() => (note.textContent = ""), 2000);
+  setTimeout(() => (note.textContent = ""), 1800);
 }
 
 window.onload = () => {
