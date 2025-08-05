@@ -3,51 +3,42 @@ body {
   font-family: 'Segoe UI', 'Meiryo', sans-serif;
   background: #111;
   color: #fff;
+  box-sizing: border-box;
 }
 
 header {
   background: #181818;
-  padding: 16px 0 10px 0;
+  padding: 24px 0 16px 0;
   text-align: center;
 }
 
-.logo {
-  font-size: 1.5em;
+h1 {
+  margin: 0 0 10px 0;
+  font-size: 2.1em;
   font-weight: bold;
   letter-spacing: 1px;
 }
-
-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0;
-  min-height: 100vh;
-  box-sizing: border-box;
+.logo {
+  font-size: 1.2em;
+  vertical-align: middle;
 }
 
-/* 上部 プレイリストと入力欄 */
-.top-list-area {
+.url-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  margin-bottom: 10px;
   width: 100%;
   max-width: 480px;
-  margin-top: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* URL入力欄・登録ボタン */
-.url-input-area {
-  display: flex;
-  width: 100%;
-  gap: 10px;
-  margin-bottom: 12px;
-  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #youtubeUrl {
   flex: 1 1 auto;
-  padding: 15px;
+  padding: 13px 10px;
   border-radius: 8px;
   border: none;
   font-size: 1.1em;
@@ -58,13 +49,15 @@ main {
 #addBtn, #pasteBtn {
   padding: 0 18px;
   border-radius: 8px;
-  font-size: 1.1em;
+  font-size: 1.08em;
   font-weight: bold;
   border: none;
+  height: 45px;
   background: #1db954;
   color: #fff;
   cursor: pointer;
   transition: background 0.2s;
+  white-space: nowrap;
 }
 #pasteBtn {
   background: #232323;
@@ -77,85 +70,112 @@ main {
   color: #fff;
 }
 
-/* プレイリスト */
-#playlist {
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
   width: 100%;
-  max-width: 480px;
-  background: transparent;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  max-height: 238px; /* 4行分＋余白でスクロール */
-  overflow-y: auto;
-  border-radius: 12px;
   box-sizing: border-box;
 }
-#playlist li {
-  display: flex;
-  align-items: center;
-  background: #222;
-  margin-bottom: 8px;
-  padding: 13px 12px;
-  border-radius: 8px;
-  font-size: 1em;
-  gap: 12px;
-  transition: background 0.15s;
-  position: relative;
-}
-#playlist li span {
-  flex: 1 1 auto;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 500;
-}
 
-.btn-group {
-  display: flex;
-  gap: 8px;
-}
-#playlist li button {
-  background: #2c2c2c;
-  color: #fff;
-  border: none;
-  font-size: 1.3em;
-  padding: 9px 12px;
-  border-radius: 7px;
-  cursor: pointer;
-  transition: background 0.13s, color 0.13s;
-}
-#playlist li button:hover {
-  background: #1db954;
-  color: #111;
-}
-
-/* 埋め込みプレイヤー/コントロール */
+/* プレイヤーエリア */
 .player-area {
   width: 100%;
   max-width: 480px;
-  margin: 0 auto 16px auto;
-  background: transparent;
+  margin: 10px auto 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
+.embed-box {
+  width: 100%;
+  max-width: 370px;
+  aspect-ratio: 16/9;
+  margin: 0 auto;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px #000b;
+  background: #000;
+}
+
 #player {
   width: 100%;
-  max-width: 360px;
-  margin: 10px 0 10px 0;
-  aspect-ratio: 16/9;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 4px 18px #000a;
+  height: 100%;
 }
-.controls {
+
+.now-info {
+  text-align: center;
+  margin: 14px 0 0 0;
+}
+.now-playing-label {
+  font-size: 1.03em;
+  color: #ccc;
+  margin-bottom: 3px;
+}
+.now-title {
+  font-size: 1.18em;
+  font-weight: bold;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 340px;
+  margin: 0 auto 2px auto;
+}
+.now-channel {
+  font-size: 0.98em;
+  color: #bbb;
+}
+
+/* いいね・バッドボタン */
+.like-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 9px 0;
+}
+.like-btn, .dislike-btn {
+  font-size: 1.5em;
+  background: #232323;
+  color: #bbb;
+  border: none;
+  border-radius: 40px;
+  padding: 6px 22px;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* シークバー */
+.seekbar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 97%;
+  margin: 0 auto 5px auto;
+}
+#seekbar {
+  flex: 1 1 auto;
+  accent-color: #1db954;
+  height: 4px;
+}
+#currentTime, #duration {
+  font-size: 0.98em;
+  width: 46px;
+  text-align: center;
+  color: #bbb;
+}
+
+/* コントロール */
+.controls-row {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 23px;
-  margin: 12px 0 8px 0;
+  gap: 25px;
+  margin: 16px 0 10px 0;
 }
-.controls button {
+.controls-row button {
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -163,48 +183,91 @@ main {
   font-size: 2.1em;
   background: #232323;
   color: #fff;
-  box-shadow: 0 2px 10px #0004;
+  box-shadow: 0 2px 10px #0005;
   cursor: pointer;
   transition: background 0.17s, color 0.17s, transform 0.13s;
 }
-.controls button:active {
+.controls-row button:active, .controls-row button.active {
   background: #1db954;
   color: #111;
-  transform: scale(1.07);
+  transform: scale(1.1);
 }
-.controls button[title="再生/停止"] {
+#playPauseBtn {
   background: #1db954;
   color: #111;
-}
-#notification {
-  color: #1db954;
-  font-weight: bold;
-  min-height: 18px;
-  margin: 4px 0 0 0;
+  font-size: 2.25em;
 }
 
-/* 現在再生中 */
-.now-playing-container {
+/* 曲リストセクション */
+.list-section {
   width: 100%;
-  margin: 6px 0 0 0;
-  overflow: hidden;
-  height: 28px;
-  display: flex;
-  justify-content: center;
+  max-width: 480px;
+  margin: 8px auto 24px auto;
 }
-.now-playing-text {
-  white-space: nowrap;
-  font-size: 1em;
-  color: #1db954;
+.list-label {
+  text-align: center;
+  color: #fff;
   font-weight: bold;
-  animation: scroll-left 14s linear infinite;
-}
-@keyframes scroll-left {
-  0% { transform: translateX(100%);}
-  100% { transform: translateX(-100%);}
+  margin-bottom: 2px;
+  font-size: 1.13em;
+  letter-spacing: 0.03em;
 }
 
-/* フッター固定 */
+#playlist {
+  width: 100%;
+  background: transparent;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 205px; /* 4曲分＋余白でスクロール */
+  overflow-y: auto;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+#playlist li {
+  display: flex;
+  align-items: center;
+  background: #222;
+  margin-bottom: 4px;
+  padding: 6px 6px;
+  border-radius: 7px;
+  font-size: 0.98em;
+  gap: 7px;
+  min-height: 38px;
+  transition: background 0.1s;
+}
+#playlist li span {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+  font-size: 0.98em;
+}
+.btn-group {
+  display: flex;
+  gap: 5px;
+}
+#playlist li button {
+  background: #2c2c2c;
+  color: #fff;
+  border: none;
+  font-size: 1.22em;
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.11s, color 0.11s;
+  margin-left: 1px;
+  height: 33px;
+  display: flex;
+  align-items: center;
+}
+#playlist li button:hover {
+  background: #1db954;
+  color: #111;
+}
+
+/* フッター */
 footer {
   width: 100vw;
   background: #181818;
@@ -222,22 +285,36 @@ footer a {
   text-decoration: none;
 }
 
-/* PCデザイン調整 */
-@media (min-width: 600px) {
-  .top-list-area, .player-area {
-    max-width: 540px;
-  }
-  #player {
-    max-width: 430px;
-  }
-  #playlist {
-    max-width: 540px;
-  }
+/* スクロールバー装飾（スマホにも適用） */
+#playlist {
+  scrollbar-width: thin;
+  scrollbar-color: #1db954 #222;
+}
+#playlist::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+#playlist::-webkit-scrollbar-thumb {
+  background: #1db954;
+  border-radius: 6px;
+}
+#playlist::-webkit-scrollbar-track {
+  background: #222;
+  border-radius: 6px;
 }
 
-/* 超狭スマホ対応 */
-@media (max-width: 340px) {
-  #player, .player-area, .top-list-area {
-    max-width: 95vw;
+/* レスポンシブ */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.32em;
+  }
+  .player-area, .list-section {
+    max-width: 97vw;
+  }
+  .now-title {
+    max-width: 84vw;
+  }
+  .embed-box {
+    max-width: 97vw;
   }
 }
