@@ -1,25 +1,36 @@
-body {
+html, body {
   margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100vw;
+  overflow: hidden; /* これで全体スクロール禁止 */
+}
+body {
   font-family: 'Segoe UI', 'Meiryo', sans-serif;
   background: #111;
   color: #fff;
   box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
 }
 
 header {
   background: #181818;
-  padding: 24px 0 16px 0;
+  padding: 20px 0 10px 0;
   text-align: center;
+  flex-shrink: 0;
 }
 
 h1 {
   margin: 0 0 10px 0;
-  font-size: 2.1em;
+  font-size: 2em;
   font-weight: bold;
   letter-spacing: 1px;
 }
 .logo {
-  font-size: 1.2em;
+  font-size: 1.1em;
   vertical-align: middle;
 }
 
@@ -28,8 +39,8 @@ h1 {
   justify-content: center;
   align-items: center;
   gap: 7px;
-  margin-top: 8px;
-  margin-bottom: 10px;
+  margin-top: 7px;
+  margin-bottom: 6px;
   width: 100%;
   max-width: 480px;
   margin-left: auto;
@@ -71,24 +82,27 @@ h1 {
 }
 
 main {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
-  width: 100%;
-  box-sizing: border-box;
+  justify-content: flex-start;
+  overflow: hidden;
 }
 
 /* プレイヤーエリア */
 .player-area {
   width: 100%;
   max-width: 480px;
-  margin: 10px auto 0 auto;
+  margin: 0 auto 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex-shrink: 0;
 }
-
 .embed-box {
   width: 100%;
   max-width: 370px;
@@ -114,16 +128,31 @@ main {
   color: #ccc;
   margin-bottom: 3px;
 }
+.now-title-scroll-wrap {
+  max-width: 345px;
+  margin: 0 auto 2px auto;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  height: 1.6em;
+}
 .now-title {
-  font-size: 1.18em;
+  font-size: 1.16em;
   font-weight: bold;
   color: #fff;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 340px;
-  margin: 0 auto 2px auto;
+  display: inline-block;
+  position: relative;
+  transition: none;
 }
+.now-title.scroll {
+  animation: scroll-left-title 13s linear infinite;
+}
+@keyframes scroll-left-title {
+  0% { transform: translateX(100%);}
+  100% { transform: translateX(-100%);}
+}
+
 .now-channel {
   font-size: 0.98em;
   color: #bbb;
@@ -133,18 +162,23 @@ main {
 .like-row {
   display: flex;
   justify-content: center;
-  gap: 16px;
+  gap: 25px;
   margin: 9px 0;
 }
 .like-btn, .dislike-btn {
-  font-size: 1.5em;
+  font-size: 1.7em;
   background: #232323;
   color: #bbb;
   border: none;
-  border-radius: 40px;
-  padding: 6px 22px;
-  cursor: not-allowed;
-  opacity: 0.5;
+  border-radius: 38px;
+  padding: 6px 23px;
+  cursor: pointer;
+  opacity: 1;
+  transition: background 0.12s, color 0.12s;
+}
+.like-btn.active, .dislike-btn.active {
+  background: #1db954;
+  color: #fff;
 }
 
 /* シークバー */
@@ -173,7 +207,7 @@ main {
   justify-content: center;
   align-items: center;
   gap: 25px;
-  margin: 16px 0 10px 0;
+  margin: 16px 0 8px 0;
 }
 .controls-row button {
   width: 56px;
@@ -186,6 +220,7 @@ main {
   box-shadow: 0 2px 10px #0005;
   cursor: pointer;
   transition: background 0.17s, color 0.17s, transform 0.13s;
+  outline: none;
 }
 .controls-row button:active, .controls-row button.active {
   background: #1db954;
@@ -202,7 +237,8 @@ main {
 .list-section {
   width: 100%;
   max-width: 480px;
-  margin: 8px auto 24px auto;
+  margin: 8px auto 10px auto;
+  flex-shrink: 1;
 }
 .list-label {
   text-align: center;
@@ -212,14 +248,13 @@ main {
   font-size: 1.13em;
   letter-spacing: 0.03em;
 }
-
 #playlist {
   width: 100%;
   background: transparent;
   margin: 0;
   padding: 0;
   list-style: none;
-  max-height: 205px; /* 4曲分＋余白でスクロール */
+  max-height: 132px; /* 2.5曲分、1画面表示に納めやすく */
   overflow-y: auto;
   border-radius: 10px;
   box-sizing: border-box;
@@ -229,11 +264,11 @@ main {
   align-items: center;
   background: #222;
   margin-bottom: 4px;
-  padding: 6px 6px;
+  padding: 4px 6px;
   border-radius: 7px;
-  font-size: 0.98em;
+  font-size: 0.97em;
   gap: 7px;
-  min-height: 38px;
+  min-height: 33px;
   transition: background 0.1s;
 }
 #playlist li span {
@@ -252,19 +287,63 @@ main {
   background: #2c2c2c;
   color: #fff;
   border: none;
-  font-size: 1.22em;
-  padding: 4px 10px;
+  font-size: 1.12em;
+  padding: 4px 13px;
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.11s, color 0.11s;
   margin-left: 1px;
-  height: 33px;
+  height: 31px;
   display: flex;
   align-items: center;
+  white-space: nowrap;
+}
+#playlist li .delete-btn {
+  min-width: 48px;
+  background: #a02b2b;
 }
 #playlist li button:hover {
   background: #1db954;
   color: #111;
+}
+
+/* モーダル（削除確認） */
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-content {
+  background: #232323;
+  color: #fff;
+  padding: 25px 30px 18px 30px;
+  border-radius: 16px;
+  text-align: center;
+  min-width: 210px;
+  box-shadow: 0 4px 40px #0009;
+}
+.modal-btn-row {
+  display: flex;
+  gap: 25px;
+  margin-top: 18px;
+  justify-content: center;
+}
+.modal-content button {
+  font-size: 1.06em;
+  padding: 6px 20px;
+  border-radius: 7px;
+  border: none;
+  background: #1db954;
+  color: #fff;
+  cursor: pointer;
+}
+.modal-content button:last-child {
+  background: #2c2c2c;
+  color: #fff;
 }
 
 /* フッター */
@@ -285,36 +364,20 @@ footer a {
   text-decoration: none;
 }
 
-/* スクロールバー装飾（スマホにも適用） */
-#playlist {
-  scrollbar-width: thin;
-  scrollbar-color: #1db954 #222;
-}
-#playlist::-webkit-scrollbar {
-  height: 4px;
-  width: 4px;
-}
-#playlist::-webkit-scrollbar-thumb {
-  background: #1db954;
-  border-radius: 6px;
-}
-#playlist::-webkit-scrollbar-track {
-  background: #222;
-  border-radius: 6px;
-}
-
-/* レスポンシブ */
 @media (max-width: 600px) {
   h1 {
-    font-size: 1.32em;
+    font-size: 1.19em;
   }
   .player-area, .list-section {
     max-width: 97vw;
   }
-  .now-title {
+  .now-title-scroll-wrap {
     max-width: 84vw;
   }
   .embed-box {
+    max-width: 97vw;
+  }
+  #playlist {
     max-width: 97vw;
   }
 }
