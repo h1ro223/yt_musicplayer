@@ -4,8 +4,8 @@ let currentIndex = 0;
 let isLooping = false;
 let isShuffling = false;
 let seekbarTimer = null;
+let toDeleteIndex = null;
 
-// ========== YouTube IFrame API ==========
 function onYouTubeIframeAPIReady() {
   player = new YT.Player("player", {
     height: "200",
@@ -20,8 +20,8 @@ function onYouTubeIframeAPIReady() {
     }
   });
 }
-
 function onPlayerStateChange(event) {
+  updatePlayPauseBtn();
   if (event.data === YT.PlayerState.ENDED) {
     if (isLooping) {
       loadVideo(currentIndex);
@@ -36,7 +36,6 @@ function onPlayerStateChange(event) {
   }
 }
 
-// ========== 入力欄：自動ペースト補助 ==========
 document.addEventListener("DOMContentLoaded", () => {
   const urlInput = document.getElementById("youtubeUrl");
   urlInput.addEventListener("focus", async function () {
@@ -62,7 +61,6 @@ function pasteUrl() {
   }
 }
 
-// ========== プレイリスト登録 ==========
 function addVideo() {
   const url = document.getElementById("youtubeUrl").value.trim();
   const videoId = extractVideoID(url);
@@ -87,7 +85,6 @@ function extractVideoID(url) {
   return match ? match[1] : null;
 }
 
-// ========== プレイリスト表示 ==========
 function renderPlaylist() {
   const list = document.getElementById("playlist");
   list.innerHTML = "";
@@ -99,43 +96,28 @@ function renderPlaylist() {
         <button onclick="moveUp(${i})" title="上へ">↑</button>
         <button onclick="moveDown(${i})" title="下へ">↓</button>
         <button onclick="window.open('https://www.youtube.com/watch?v=${video.id}', '_blank')" title="YouTubeで開く">▶</button>
-        <button onclick="removeVideo(${i})" title="削除">削除</button>
+        <button class="delete-btn" onclick="confirmDelete(${i})" title="削除">削除</button>
       </div>
     `;
     list.appendChild(li);
   });
 }
 
-// ========== プレイヤー操作 ==========
-function loadVideo(index) {
-  currentIndex = index;
-  player.loadVideoById(playlist[index].id);
-  updateNowPlaying();
-  updateSeekbarUI();
+// 削除警告モーダル
+function confirmDelete(index) {
+  toDeleteIndex = index;
+  document.getElementById("confirmDeleteModal").style.display = "flex";
 }
-function updateNowPlaying() {
-  const title = playlist[currentIndex]?.title || "";
-  const author = playlist[currentIndex]?.author || "";
-  document.getElementById("nowPlayingTitle").textContent = title;
-  document.getElementById("nowPlayingChannel").textContent = author;
-}
-function togglePlay() {
-  const state = player.getPlayerState();
-  if (state === YT.PlayerState.PLAYING) player.pauseVideo();
-  else player.playVideo();
-}
-function nextVideo() {
-  if (isShuffling) {
-    currentIndex = Math.floor(Math.random() * playlist.length);
-  } else {
-    currentIndex = (currentIndex + 1) % playlist.length;
-  }
-  loadVideo(currentIndex);
-}
-function prevVideo() {
-  currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
-  loadVideo(currentIndex);
-}
+document.getElementById("confirmDeleteYes").onclick = () => {
+  if (toDeleteIndex !== null) removeVideo(toDeleteIndex);
+  document.getElementById("confirmDeleteModal").style.display = "none";
+  toDeleteIndex = null;
+};
+document.getElementById("confirmDeleteNo").onclick = () => {
+  document.getElementById("confirmDeleteModal").style.display = "none";
+  toDeleteIndex = null;
+};
+
 function removeVideo(index) {
   playlist.splice(index, 1);
   localStorage.setItem("playlist", JSON.stringify(playlist));
@@ -151,12 +133,70 @@ function removeVideo(index) {
     }
   }
 }
+
+function loadVideo(index) {
+  currentIndex = index;
+  player.loadVideoById(playlist[index].id);
+  updateNowPlaying();
+  updateSeekbarUI();
+  resetLikeBtns();
+}
+
+function updateNowPlaying() {
+  const title = playlist[currentIndex]?.title || "";
+  const author = playlist[currentIndex]?.author || "";
+  const titleElem = document.getElementById("nowPlayingTitle");
+  titleElem.textContent = title;
+  document.getElementById("nowPlayingChannel").textContent = author;
+  setTimeout(() => updateScrollTitle(), 300); // タイトルセット後に判定
+}
+
+function updateScrollTitle() {
+  const wrap = document.querySelector(".now-title-scroll-wrap");
+  const titleElem = document.getElementById("nowPlayingTitle");
+  if (!titleElem || !wrap) return;
+  // スクロール長判定
+  if (titleElem.scrollWidth > wrap.offsetWidth) {
+    titleElem.classList.add("scroll");
+  } else {
+    titleElem.classList.remove("scroll");
+  }
+}
+
+function togglePlay() {
+  const state = player.getPlayerState();
+  if (state === YT.PlayerState.PLAYING) player.pauseVideo();
+  else player.playVideo();
+  setTimeout(() => updatePlayPauseBtn(), 150);
+}
+
+function updatePlayPauseBtn() {
+  const btn = document.getElementById("playPauseBtn");
+  if (!player || !btn) return;
+  const state = player.getPlayerState();
+  btn.textContent = (state === YT.PlayerState.PLAYING) ? "⏸️" : "▶️";
+}
+
+function nextVideo() {
+  if (isShuffling) {
+    currentIndex = Math.floor(Math.random() * playlist.length);
+  } else {
+    currentIndex = (currentIndex + 1) % playlist.length;
+  }
+  loadVideo(currentIndex);
+}
+function prevVideo() {
+  currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+  loadVideo(currentIndex);
+}
 function shufflePlaylist() {
   isShuffling = !isShuffling;
+  document.getElementById("shuffleBtn").classList.toggle("active", isShuffling);
   showNotification(`シャッフルを${isShuffling ? "オン" : "オフ"}にしました！`);
 }
 function toggleLoop() {
   isLooping = !isLooping;
+  document.getElementById("loopBtn").classList.toggle("active", isLooping);
   showNotification(`ループを${isLooping ? "オン" : "オフ"}にしました！`);
 }
 function moveUp(index) {
@@ -172,15 +212,12 @@ function moveDown(index) {
   renderPlaylist();
 }
 function showNotification(message) {
-  const note = document.getElementById("notification");
-  note.textContent = message;
-  setTimeout(() => (note.textContent = ""), 1800);
+  // 画面内表示が欲しい場合は適宜追加
 }
 
-// ========== シークバー連携 ==========
 function startSeekbar() {
   stopSeekbar();
-  seekbarTimer = setInterval(updateSeekbarUI, 500);
+  seekbarTimer = setInterval(updateSeekbarUI, 400);
 }
 function stopSeekbar() {
   if (seekbarTimer) clearInterval(seekbarTimer);
@@ -211,9 +248,28 @@ document.getElementById("seekbar").addEventListener("input", function (e) {
   updateSeekbarUI();
 });
 
-// ========== 起動時初期化 ==========
+// 👍👎ボタン
+document.getElementById("likeBtn").onclick = function () {
+  this.classList.toggle("active");
+  document.getElementById("dislikeBtn").classList.remove("active");
+};
+document.getElementById("dislikeBtn").onclick = function () {
+  this.classList.toggle("active");
+  document.getElementById("likeBtn").classList.remove("active");
+};
+function resetLikeBtns() {
+  document.getElementById("likeBtn").classList.remove("active");
+  document.getElementById("dislikeBtn").classList.remove("active");
+}
+
+// 起動時初期化
 window.onload = () => {
   renderPlaylist();
   updateNowPlaying();
   updateSeekbarUI();
+  updatePlayPauseBtn();
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  // スクロール禁止念押し
+  window.addEventListener('scroll', function(){ window.scrollTo(0,0); });
 };
