@@ -1,0 +1,200 @@
+/* ベース */
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: #121212;
+  color: #ffffff;
+}
+
+a {
+  color: #1db954;
+  text-decoration: none;
+}
+
+header {
+  background: #181818;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.now-playing-container {
+  overflow: hidden;
+  width: 50%;
+  white-space: nowrap;
+}
+
+.now-playing-text {
+  display: inline-block;
+  animation: scroll-left 12s linear infinite;
+  font-size: 0.9rem;
+  color: #1db954;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  gap: 20px;
+}
+
+/* プレイリストセクション */
+.playlist-section {
+  flex: 1 1 300px;
+  min-width: 300px;
+}
+
+.add-url {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.add-url input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background: #282828;
+  color: white;
+}
+
+.add-url button {
+  padding: 10px 15px;
+  background: #1db954;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+#playlist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#playlist li {
+  background: #181818;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#playlist li span {
+  flex: 1;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#playlist li .btn-group {
+  display: flex;
+  gap: 5px;
+}
+
+#playlist li button {
+  background: #282828;
+  color: white;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+#playlist li button:hover {
+  background: #1db954;
+}
+
+/* プレイヤーセクション */
+.player-section {
+  flex: 2 1 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#player {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: black;
+  margin-bottom: 15px;
+}
+
+.controls {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.controls button {
+  width: 50px;
+  height: 50px;
+  background: #282828;
+  border-radius: 50%;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.controls button:hover {
+  background: #1db954;
+}
+
+#notification {
+  height: 20px;
+  margin-top: 10px;
+  color: #1db954;
+  font-weight: bold;
+}
+
+/* フッター */
+footer {
+  margin-top: 40px;
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  color: #666;
+  background: #181818;
+}
+
+/* スマホ対応 */
+@media (max-width: 768px) {
+  main {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .now-playing-container {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
