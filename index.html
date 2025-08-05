@@ -2,11 +2,20 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>My YouTube Music Player</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
+  <div id="confirmDeleteModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div>本当に削除しますか？</div>
+      <div class="modal-btn-row">
+        <button id="confirmDeleteYes">はい</button>
+        <button id="confirmDeleteNo">いいえ</button>
+      </div>
+    </div>
+  </div>
   <header>
     <h1><span class="logo">🎵</span> My YouTube Music Player</h1>
     <div class="url-row">
@@ -23,12 +32,14 @@
       </div>
       <div class="now-info">
         <div class="now-playing-label">現在再生中 <span class="now-icon">▶️</span></div>
-        <div class="now-title" id="nowPlayingTitle"></div>
+        <div class="now-title-scroll-wrap">
+          <div class="now-title" id="nowPlayingTitle"></div>
+        </div>
         <div class="now-channel" id="nowPlayingChannel"></div>
       </div>
       <div class="like-row">
-        <button class="like-btn" disabled>👍</button>
-        <button class="dislike-btn" disabled>👎</button>
+        <button class="like-btn" id="likeBtn">👍</button>
+        <button class="dislike-btn" id="dislikeBtn">👎</button>
       </div>
       <div class="seekbar-row">
         <span id="currentTime">0:00</span>
@@ -36,11 +47,11 @@
         <span id="duration">0:00</span>
       </div>
       <div class="controls-row">
-        <button onclick="shufflePlaylist()" title="シャッフル">🔀</button>
+        <button onclick="shufflePlaylist()" title="シャッフル" id="shuffleBtn">🔀</button>
         <button onclick="prevVideo()" title="前へ">⏮️</button>
-        <button onclick="togglePlay()" title="再生/停止" id="playPauseBtn">⏯️</button>
+        <button onclick="togglePlay()" title="再生/停止" id="playPauseBtn">▶️</button>
         <button onclick="nextVideo()" title="次へ">⏭️</button>
-        <button onclick="toggleLoop()" title="ループ">🔁</button>
+        <button onclick="toggleLoop()" title="ループ" id="loopBtn">🔁</button>
       </div>
     </section>
     <section class="list-section">
