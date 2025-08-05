@@ -1,46 +1,47 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My YouTube Music Player</title>
-    <link rel="stylesheet" href="./style.css" />
-  </head>
-  <body>
-    <header>
-      <div class="logo">🎵 My YouTube Music Player</div>
-      <div class="now-playing-container">
-        <div class="now-playing-text" id="nowPlaying">現在再生中 ▶</div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My YouTube Music Player</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">🎵 My YouTube Music Player</div>
+  </header>
+
+  <main>
+    <section class="top-list-area">
+      <div class="url-input-area">
+        <input type="text" id="youtubeUrl" placeholder="YouTubeのURLを入力" autocomplete="on" />
+        <button id="pasteBtn" onclick="pasteUrl()">ペースト</button>
+        <button id="addBtn" onclick="addVideo()">登録</button>
       </div>
-    </header>
+      <ul id="playlist"></ul>
+    </section>
 
-    <main>
-      <section class="playlist-section">
-        <div class="add-url">
-          <input type="text" id="youtubeUrl" placeholder="YouTubeのURLを入力" />
-          <button onclick="addVideo()">登録</button>
-        </div>
-        <ul id="playlist"></ul>
-      </section>
+    <section class="player-area">
+      <div id="player"></div>
+      <div class="controls">
+        <button onclick="shufflePlaylist()" title="シャッフル">🔀</button>
+        <button onclick="prevVideo()" title="前へ">⏮️</button>
+        <button onclick="togglePlay()" title="再生/停止">⏯️</button>
+        <button onclick="nextVideo()" title="次へ">⏭️</button>
+        <button onclick="toggleLoop()" title="ループ">🔁</button>
+      </div>
+      <div id="notification"></div>
+      <div class="now-playing-container">
+        <div class="now-playing-text" id="nowPlaying">現在再生中 ▶ </div>
+      </div>
+    </section>
+  </main>
 
-      <section class="player-section">
-        <div id="player"></div>
-        <div class="controls">
-          <button onclick="prevVideo()">⏮️</button>
-          <button onclick="togglePlay()">⏯️</button>
-          <button onclick="nextVideo()">⏭️</button>
-          <button onclick="shufflePlaylist()">🔀</button>
-          <button onclick="toggleLoop()">🔁</button>
-        </div>
-        <div id="notification"></div>
-      </section>
-    </main>
+  <footer>
+    <span>made by <a href="https://github.com/h1ro223" target="_blank">hiro/ヒロ</a></span>
+  </footer>
 
-    <footer>
-      made by <a href="https://github.com/h1ro223" target="_blank">hiro/ヒロ</a>
-    </footer>
-
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script src="./script.js"></script>
-  </body>
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="./script.js"></script>
+</body>
 </html>
