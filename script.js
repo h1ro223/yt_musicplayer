@@ -272,4 +272,4 @@ window.onload = () => {
   document.documentElement.scrollTop = 0;
   // スクロール禁止念押し
   window.addEventListener('scroll', function(){ window.scrollTo(0,0); });
-};
+}; 
