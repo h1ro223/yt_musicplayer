@@ -307,12 +307,12 @@ function resetLikeBtns() {
 
 // --- 使い方モーダル ---
 document.getElementById("helpBtn").onclick = function () {
-  fetch("help.txt")
+  fetch("./help.txt")
     .then(res => res.text())
     .then(text => {
       document.getElementById("helpTextArea").textContent = text;
-      document.getElementById("helpVideo1").src = "help1.mp4";
-      document.getElementById("helpVideo2").src = "help2.mp4";
+      document.getElementById("helpVideo1").src = "./help1.mp4";
+      document.getElementById("helpVideo2").src = "./help2.mp4";
       document.getElementById("helpModal").style.display = "flex";
     })
     .catch(() => {
