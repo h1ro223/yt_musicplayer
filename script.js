@@ -6,7 +6,7 @@ let isShuffling = false;
 let seekbarTimer = null;
 let toDeleteIndex = null;
 
-// ここを新しいデフォルト曲ID＆仮タイトルに変更！
+// デフォルト動画
 const defaultVideo = {
   id: "wWV3rUzHbZ8",
   title: "技能中、いちいち悲鳴あげる奴",
@@ -26,13 +26,12 @@ function setDefaultIfFirstOpen() {
         }];
         localStorage.setItem("playlist", JSON.stringify(playlist));
         renderPlaylist();
-        // プレイヤー初期化後に自動再生（少し遅延が安全）
         setTimeout(() => {
           loadVideo(0);
           if (player && typeof player.playVideo === "function") player.playVideo();
         }, 700);
       });
-    return true; // 初期化した場合はtrue
+    return true;
   }
   return false;
 }
@@ -44,9 +43,7 @@ function onYouTubeIframeAPIReady() {
     width: "100%",
     videoId: "",
     events: {
-      onReady: () => {
-        // ページ読み込み時の処理はwindow.onload側で実行
-      },
+      onReady: () => {},
       onStateChange: onPlayerStateChange
     }
   });
@@ -308,9 +305,31 @@ function resetLikeBtns() {
   document.getElementById("dislikeBtn").classList.remove("active");
 }
 
+// --- 使い方モーダル ---
+document.getElementById("helpBtn").onclick = function () {
+  fetch("help.txt")
+    .then(res => res.text())
+    .then(text => {
+      document.getElementById("helpTextArea").textContent = text;
+      document.getElementById("helpVideo1").src = "help1.mp4";
+      document.getElementById("helpVideo2").src = "help2.mp4";
+      document.getElementById("helpModal").style.display = "flex";
+    })
+    .catch(() => {
+      document.getElementById("helpTextArea").textContent = "使い方テキストの読み込みに失敗しました";
+      document.getElementById("helpVideo1").src = "";
+      document.getElementById("helpVideo2").src = "";
+      document.getElementById("helpModal").style.display = "flex";
+    });
+};
+document.getElementById("helpCloseBtn").onclick = function () {
+  document.getElementById("helpModal").style.display = "none";
+  document.getElementById("helpVideo1").pause();
+  document.getElementById("helpVideo2").pause();
+};
+
 // ========== 初期化 ==========
 window.onload = () => {
-  // 1. 初回起動時デフォルトセット（セットされた場合はこの時点でplaylistができてる）
   const isDefaultSet = setDefaultIfFirstOpen();
   if (!isDefaultSet) {
     playlist = JSON.parse(localStorage.getItem("playlist") || "[]");
