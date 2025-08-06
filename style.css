@@ -3,7 +3,7 @@ html, body {
   padding: 0;
   height: 100%;
   width: 100vw;
-  overflow: hidden; /* 全体スクロール禁止 */
+  overflow: hidden;
 }
 body {
   font-family: 'Segoe UI', 'Meiryo', sans-serif;
@@ -93,7 +93,6 @@ main {
   overflow: hidden;
 }
 
-/* プレイヤーエリア */
 .player-area {
   width: 100%;
   max-width: 480px;
@@ -268,7 +267,7 @@ main {
   margin: 0;
   padding: 0;
   list-style: none;
-  max-height: 132px; /* 2.5曲分、1画面表示に納めやすく */
+  max-height: 132px;
   overflow-y: auto;
   border-radius: 10px;
   box-sizing: border-box;
@@ -342,7 +341,9 @@ main {
 }
 .help-modal-content {
   min-width: 250px;
-  max-width: 360px;
+  max-width: 340px;
+  padding: 23px 10px 16px 10px;
+  box-sizing: border-box;
 }
 .modal-btn-row {
   display: flex;
@@ -364,13 +365,16 @@ main {
   color: #fff;
 }
 
-/* video要素（使い方動画） */
+/* help動画サイズの最適化ポイント！ */
 #helpVideo1, #helpVideo2 {
-  border-radius: 12px;
-  margin: 0 auto;
-  background: #000;
   display: block;
-  margin-bottom: 10px;
+  margin: 0 auto 12px auto;
+  background: #000;
+  border-radius: 12px;
+  width: 96%;
+  max-width: 320px;
+  max-height: 180px;
+  object-fit: contain;
   box-shadow: 0 2px 14px #000a;
 }
 
@@ -412,5 +416,9 @@ footer a {
   .modal-content, .help-modal-content {
     max-width: 99vw !important;
     padding: 12px 3vw 10px 3vw;
+  }
+  #helpVideo1, #helpVideo2 {
+    max-width: 95vw;
+    max-height: 30vw;
   }
 }
