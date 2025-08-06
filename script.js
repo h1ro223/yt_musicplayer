@@ -328,23 +328,22 @@ document.getElementById("helpCloseBtn").onclick = function () {
   document.getElementById("helpVideo2").pause();
 };
 
-// ========== 初期化 ==========
-window.onload = () => {
-  const isDefaultSet = setDefaultIfFirstOpen();
-  if (!isDefaultSet) {
-    playlist = JSON.parse(localStorage.getItem("playlist") || "[]");
-    renderPlaylist();
-    updateNowPlaying();
-    updateSeekbarUI();
-    updatePlayPauseBtn();
-    if (playlist.length > 0) {
-      loadVideo(0);
-      setTimeout(() => {
-        if (player && typeof player.playVideo === "function") player.playVideo();
-      }, 700);
-    }
-  }
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  window.addEventListener('scroll', function(){ window.scrollTo(0,0); });
+// --- バックアップ機能（エクスポート/インポート）---
+document.getElementById("exportBtn").onclick = function () {
+  const data = JSON.stringify(playlist, null, 2);
+  const blob = new Blob([data], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "playlist-backup.json";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 100);
 };
+document.getElementById("importBtn").onclick = function () {
+  document.getElementById("importInput").click();
+};
+document.getElementById("importInput").addEventListener
