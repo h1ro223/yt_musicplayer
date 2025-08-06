@@ -3,7 +3,7 @@ html, body {
   padding: 0;
   height: 100%;
   width: 100vw;
-  overflow: hidden; /* これで全体スクロール禁止 */
+  overflow: hidden; /* 全体スクロール禁止 */
 }
 body {
   font-family: 'Segoe UI', 'Meiryo', sans-serif;
@@ -158,14 +158,14 @@ main {
   color: #bbb;
 }
 
-/* いいね・バッドボタン */
+/* いいね・バッド・ヘルプボタン */
 .like-row {
   display: flex;
   justify-content: center;
-  gap: 25px;
+  gap: 18px;
   margin: 9px 0;
 }
-.like-btn, .dislike-btn {
+.like-btn, .dislike-btn, .help-btn {
   font-size: 1.7em;
   background: #232323;
   color: #bbb;
@@ -179,6 +179,20 @@ main {
 .like-btn.active, .dislike-btn.active {
   background: #1db954;
   color: #fff;
+}
+.help-btn {
+  font-size: 1.4em;
+  background: #232323;
+  color: #1db954;
+  padding: 6px 18px 6px 18px;
+  margin-left: 3px;
+  font-weight: bold;
+  border: 1px solid #1db954;
+  transition: background 0.16s, color 0.16s;
+}
+.help-btn:hover {
+  background: #1db954;
+  color: #232323;
 }
 
 /* シークバー */
@@ -307,7 +321,7 @@ main {
   color: #111;
 }
 
-/* モーダル（削除確認） */
+/* モーダル（削除・使い方） */
 .modal {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -325,6 +339,10 @@ main {
   text-align: center;
   min-width: 210px;
   box-shadow: 0 4px 40px #0009;
+}
+.help-modal-content {
+  min-width: 250px;
+  max-width: 360px;
 }
 .modal-btn-row {
   display: flex;
@@ -346,6 +364,16 @@ main {
   color: #fff;
 }
 
+/* video要素（使い方動画） */
+#helpVideo1, #helpVideo2 {
+  border-radius: 12px;
+  margin: 0 auto;
+  background: #000;
+  display: block;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 14px #000a;
+}
+
 /* フッター */
 footer {
   width: 100vw;
@@ -364,6 +392,7 @@ footer a {
   text-decoration: none;
 }
 
+/* スマホ対応 */
 @media (max-width: 600px) {
   h1 {
     font-size: 1.19em;
@@ -380,4 +409,8 @@ footer a {
   #playlist {
     max-width: 97vw;
   }
-} 
+  .modal-content, .help-modal-content {
+    max-width: 99vw !important;
+    padding: 12px 3vw 10px 3vw;
+  }
+}
