@@ -328,66 +328,6 @@ document.getElementById("helpCloseBtn").onclick = function () {
   document.getElementById("helpVideo2").pause();
 };
 
-// --- バックアップ機能（エクスポート/インポート）---
-document.getElementById("exportBtn").onclick = function () {
-  const data = JSON.stringify(playlist, null, 2);
-  const blob = new Blob([data], {type: "application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "playlist-backup.json";
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(() => {
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, 100);
-};
-document.getElementById("importBtn").onclick = function () {
-  document.getElementById("importInput").click();
-};
-document.getElementById("importInput").addEventListener("change", function (e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function (ev) {
-    try {
-      const data = JSON.parse(ev.target.result);
-      if (!Array.isArray(data)) throw new Error();
-      playlist = data;
-      localStorage.setItem("playlist", JSON.stringify(playlist));
-      renderPlaylist();
-      if (playlist.length > 0) {
-        loadVideo(0);
-        setTimeout(() => {
-          if (player && typeof player.playVideo === "function") player.playVideo();
-        }, 400);
-      }
-      alert("曲リストを復元しました！");
-    } catch {
-      alert("不正なファイルです。");
-    }
-  };
-  reader.readAsText(file);
-});
-
-// ========== 初期化 ==========
-window.onload = () => {
-  const isDefaultSet = setDefaultIfFirstOpen();
-  if (!isDefaultSet) {
-    playlist = JSON.parse(localStorage.getItem("playlist") || "[]");
-    renderPlaylist();
-    updateNowPlaying();
-    updateSeekbarUI();
-    updatePlayPauseBtn();
-    if (playlist.length > 0) {
-      loadVideo(0);
-      setTimeout(() => {
-        if (player && typeof player.playVideo === "function") player.playVideo();
-      }, 700);
-    }
-  }
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  window.addEventListener('scroll', function(){ window.scrollTo(0,0); });
-};
+// --- 設定モーダル ⚙️ ---
+document.getElementById("settingsBtn").onclick = function () {
+  document.getElementById("settingsModal").style.display = "
