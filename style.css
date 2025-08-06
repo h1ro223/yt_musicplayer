@@ -365,7 +365,34 @@ main {
   color: #fff;
 }
 
-/* help動画サイズの最適化ポイント！ */
+/* 使い方(help)テキスト枠 拡大！ */
+#helpTextArea {
+  margin-bottom: 15px;
+  white-space: pre-wrap;
+  max-height: 220px;  /* ←ここを大きくした */
+  overflow: auto;
+}
+
+/* 閉じるボタン（help用）を赤色で目立たせる！ */
+#helpCloseBtn {
+  background: #e44;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-size: 1.06em;
+  font-weight: bold;
+  padding: 7px 30px;
+  margin-top: 4px;
+  margin-bottom: 0;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+#helpCloseBtn:hover, #helpCloseBtn:active {
+  background: #f24c78;
+  color: #fff;
+}
+
+/* help動画サイズの最適化ポイント */
 #helpVideo1, #helpVideo2 {
   display: block;
   margin: 0 auto 12px auto;
