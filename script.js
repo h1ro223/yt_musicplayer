@@ -1,20 +1,50 @@
 let player;
-let playlist = JSON.parse(localStorage.getItem("playlist") || "[]");
+let playlist;
 let currentIndex = 0;
 let isLooping = false;
 let isShuffling = false;
 let seekbarTimer = null;
 let toDeleteIndex = null;
 
+const defaultVideo = {
+  id: "0IjFUvBLVHk",
+  title: "（デフォルト曲: 自動でタイトル取得）",
+  author: ""
+};
+
+// ----- 初回だけデフォルト曲をセット -----
+function setDefaultIfFirstOpen() {
+  if (!localStorage.getItem("playlist")) {
+    fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${defaultVideo.id}`)
+      .then(res => res.json())
+      .then(data => {
+        playlist = [{
+          id: defaultVideo.id,
+          title: data.title || defaultVideo.title,
+          author: data.author_name || ""
+        }];
+        localStorage.setItem("playlist", JSON.stringify(playlist));
+        renderPlaylist();
+        // プレイヤー初期化後に自動再生（少し遅延が安全）
+        setTimeout(() => {
+          loadVideo(0);
+          if (player && typeof player.playVideo === "function") player.playVideo();
+        }, 700);
+      });
+    return true; // 初期化した場合はtrue
+  }
+  return false;
+}
+
+// ========== YouTube IFrame API ==========
 function onYouTubeIframeAPIReady() {
   player = new YT.Player("player", {
     height: "200",
     width: "100%",
-    videoId: playlist[currentIndex]?.id || "",
+    videoId: "",
     events: {
       onReady: () => {
-        if (playlist.length > 0) loadVideo(currentIndex);
-        updateSeekbarUI();
+        // ページ読み込み時の処理はwindow.onload側で実行
       },
       onStateChange: onPlayerStateChange
     }
@@ -69,13 +99,20 @@ function addVideo() {
   fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`)
     .then(res => res.json())
     .then(data => {
-      const title = data.title || videoId;
-      const author = data.author_name || "";
-      playlist.push({ id: videoId, title, author });
+      playlist.push({
+        id: videoId,
+        title: data.title || videoId,
+        author: data.author_name || ""
+      });
       localStorage.setItem("playlist", JSON.stringify(playlist));
       renderPlaylist();
       showNotification("曲を追加しました！");
-      if (playlist.length === 1) loadVideo(0);
+      if (playlist.length === 1) {
+        loadVideo(0);
+        setTimeout(() => {
+          if (player && typeof player.playVideo === "function") player.playVideo();
+        }, 400);
+      }
     });
   document.getElementById("youtubeUrl").value = "";
 }
@@ -103,7 +140,6 @@ function renderPlaylist() {
   });
 }
 
-// 削除警告モーダル
 function confirmDelete(index) {
   toDeleteIndex = index;
   document.getElementById("confirmDeleteModal").style.display = "flex";
@@ -125,6 +161,9 @@ function removeVideo(index) {
   if (index === currentIndex) {
     if (playlist.length > 0) {
       loadVideo(0);
+      setTimeout(() => {
+        if (player && typeof player.playVideo === "function") player.playVideo();
+      }, 350);
     } else {
       player.stopVideo();
       document.getElementById("nowPlayingTitle").textContent = "";
@@ -155,7 +194,6 @@ function updateScrollTitle() {
   const wrap = document.querySelector(".now-title-scroll-wrap");
   const titleElem = document.getElementById("nowPlayingTitle");
   if (!titleElem || !wrap) return;
-  // スクロール長判定
   if (titleElem.scrollWidth > wrap.offsetWidth) {
     titleElem.classList.add("scroll");
   } else {
@@ -184,10 +222,16 @@ function nextVideo() {
     currentIndex = (currentIndex + 1) % playlist.length;
   }
   loadVideo(currentIndex);
+  setTimeout(() => {
+    if (player && typeof player.playVideo === "function") player.playVideo();
+  }, 300);
 }
 function prevVideo() {
   currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
   loadVideo(currentIndex);
+  setTimeout(() => {
+    if (player && typeof player.playVideo === "function") player.playVideo();
+  }, 300);
 }
 function shufflePlaylist() {
   isShuffling = !isShuffling;
@@ -212,9 +256,10 @@ function moveDown(index) {
   renderPlaylist();
 }
 function showNotification(message) {
-  // 画面内表示が欲しい場合は適宜追加
+  // 必要なら通知表示エリアでメッセージ表示
 }
 
+// --- シークバー ---
 function startSeekbar() {
   stopSeekbar();
   seekbarTimer = setInterval(updateSeekbarUI, 400);
@@ -248,7 +293,7 @@ document.getElementById("seekbar").addEventListener("input", function (e) {
   updateSeekbarUI();
 });
 
-// 👍👎ボタン
+// --- いいね・バッド ---
 document.getElementById("likeBtn").onclick = function () {
   this.classList.toggle("active");
   document.getElementById("dislikeBtn").classList.remove("active");
@@ -262,14 +307,24 @@ function resetLikeBtns() {
   document.getElementById("dislikeBtn").classList.remove("active");
 }
 
-// 起動時初期化
+// ========== 初期化 ==========
 window.onload = () => {
-  renderPlaylist();
-  updateNowPlaying();
-  updateSeekbarUI();
-  updatePlayPauseBtn();
+  // 1. 初回起動時デフォルトセット（セットされた場合はこの時点でplaylistができてる）
+  const isDefaultSet = setDefaultIfFirstOpen();
+  if (!isDefaultSet) {
+    playlist = JSON.parse(localStorage.getItem("playlist") || "[]");
+    renderPlaylist();
+    updateNowPlaying();
+    updateSeekbarUI();
+    updatePlayPauseBtn();
+    if (playlist.length > 0) {
+      loadVideo(0);
+      setTimeout(() => {
+        if (player && typeof player.playVideo === "function") player.playVideo();
+      }, 700);
+    }
+  }
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
-  // スクロール禁止念押し
   window.addEventListener('scroll', function(){ window.scrollTo(0,0); });
-}; 
+};
