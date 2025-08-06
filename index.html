@@ -33,7 +33,20 @@
       </div>
     </div>
   </div>
-
+  <!-- 設定モーダル -->
+  <div id="settingsModal" class="modal" style="display:none;">
+    <div class="modal-content settings-modal-content">
+      <div style="font-weight:bold;font-size:1.18em;margin-bottom:7px;">設定</div>
+      <div style="margin-bottom:13px;">
+        <button id="exportBtn">曲リストを書き出し</button>
+      </div>
+      <div style="margin-bottom:13px;">
+        <input type="file" id="importInput" accept="application/json" style="display:none;">
+        <button id="importBtn">曲リストを読み込む</button>
+      </div>
+      <button id="settingsCloseBtn" class="settings-close-btn">閉じる</button>
+    </div>
+  </div>
   <header>
     <h1><span class="logo">🎵</span> My YouTube Music Player</h1>
     <div class="url-row">
@@ -42,15 +55,6 @@
       <button id="addBtn" onclick="addVideo()">登録</button>
     </div>
   </header>
-
-  <!-- 🔽 バックアップUIをここに追加！ -->
-  <div class="backup-row">
-    <button id="exportBtn">曲リストを書き出し</button>
-    <input type="file" id="importInput" accept="application/json" style="display:none;">
-    <button id="importBtn">曲リストを読み込む</button>
-  </div>
-  <!-- ここまで -->
-
   <main>
     <section class="player-area">
       <div class="embed-box">
@@ -67,6 +71,7 @@
         <button class="like-btn" id="likeBtn">👍</button>
         <button class="dislike-btn" id="dislikeBtn">👎</button>
         <button class="help-btn" id="helpBtn">❓</button>
+        <button class="settings-btn" id="settingsBtn">⚙️</button>
       </div>
       <div class="seekbar-row">
         <span id="currentTime">0:00</span>
@@ -86,11 +91,9 @@
       <ul id="playlist"></ul>
     </section>
   </main>
-
   <footer>
     <span>made by <a href="https://github.com/h1ro223" target="_blank">hiro/ヒロ</a></span>
   </footer>
-
   <script src="https://www.youtube.com/iframe_api"></script>
   <script src="./script.js"></script>
 </body>
