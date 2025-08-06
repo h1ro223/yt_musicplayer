@@ -4,11 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>My YouTube Music Player</title>
-  <!-- PWA対応 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="My YouTube Music Player">
-  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="apple-touch-icon" href="./icon.png">
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
@@ -26,7 +25,7 @@
   <div id="helpModal" class="modal" style="display:none;">
     <div class="modal-content help-modal-content">
       <div style="font-weight:bold;font-size:1.15em;margin-bottom:7px;">使い方</div>
-      <div id="helpTextArea" style="margin-bottom:15px;white-space:pre-wrap;max-height:120px;overflow:auto;"></div>
+      <div id="helpTextArea" style="margin-bottom:15px;white-space:pre-wrap;max-height:220px;overflow:auto;"></div>
       <video id="helpVideo1" controls width="100%" style="margin-bottom:12px;max-width:340px;"></video>
       <video id="helpVideo2" controls width="100%" style="max-width:340px;"></video>
       <div class="modal-btn-row" style="margin-top:13px;">
@@ -34,6 +33,7 @@
       </div>
     </div>
   </div>
+
   <header>
     <h1><span class="logo">🎵</span> My YouTube Music Player</h1>
     <div class="url-row">
@@ -42,6 +42,14 @@
       <button id="addBtn" onclick="addVideo()">登録</button>
     </div>
   </header>
+
+  <!-- 🔽 バックアップUIをここに追加！ -->
+  <div class="backup-row">
+    <button id="exportBtn">曲リストを書き出し</button>
+    <input type="file" id="importInput" accept="application/json" style="display:none;">
+    <button id="importBtn">曲リストを読み込む</button>
+  </div>
+  <!-- ここまで -->
 
   <main>
     <section class="player-area">
