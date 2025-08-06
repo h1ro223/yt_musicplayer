@@ -157,14 +157,14 @@ main {
   color: #bbb;
 }
 
-/* いいね・バッド・ヘルプボタン */
+/* いいね・バッド・ヘルプ・設定ボタン */
 .like-row {
   display: flex;
   justify-content: center;
   gap: 18px;
   margin: 9px 0;
 }
-.like-btn, .dislike-btn, .help-btn {
+.like-btn, .dislike-btn, .help-btn, .settings-btn {
   font-size: 1.7em;
   background: #232323;
   color: #bbb;
@@ -190,6 +190,23 @@ main {
   transition: background 0.16s, color 0.16s;
 }
 .help-btn:hover {
+  background: #1db954;
+  color: #232323;
+}
+
+/* 設定ボタン（⚙️） */
+.settings-btn {
+  font-size: 1.35em;
+  background: #232323;
+  color: #bbb;
+  border: 1px solid #1db954;
+  border-radius: 38px;
+  padding: 7px 21px;
+  cursor: pointer;
+  margin-left: 3px;
+  transition: background 0.14s, color 0.14s;
+}
+.settings-btn:hover {
   background: #1db954;
   color: #232323;
 }
@@ -320,7 +337,7 @@ main {
   color: #111;
 }
 
-/* モーダル（削除・使い方） */
+/* モーダル（削除・使い方・設定） */
 .modal {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -345,23 +362,30 @@ main {
   padding: 23px 10px 16px 10px;
   box-sizing: border-box;
 }
-.modal-btn-row {
-  display: flex;
-  gap: 25px;
-  margin-top: 18px;
-  justify-content: center;
+.settings-modal-content {
+  min-width: 220px;
+  max-width: 320px;
+  padding: 22px 15px 18px 15px;
+  box-sizing: border-box;
 }
-.modal-content button {
-  font-size: 1.06em;
-  padding: 6px 20px;
-  border-radius: 7px;
-  border: none;
-  background: #1db954;
+.settings-modal-content button {
+  margin-bottom: 7px;
+}
+.settings-close-btn {
+  background: #e44;
   color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-size: 1.06em;
+  font-weight: bold;
+  padding: 7px 30px;
+  margin-top: 4px;
+  margin-bottom: 0;
   cursor: pointer;
+  transition: background 0.18s;
 }
-.modal-content button:last-child {
-  background: #2c2c2c;
+.settings-close-btn:hover, .settings-close-btn:active {
+  background: #f24c78;
   color: #fff;
 }
 
@@ -369,7 +393,7 @@ main {
 #helpTextArea {
   margin-bottom: 15px;
   white-space: pre-wrap;
-  max-height: 220px;  /* ←ここを大きくした */
+  max-height: 220px;
   overflow: auto;
 }
 
@@ -440,7 +464,7 @@ footer a {
   #playlist {
     max-width: 97vw;
   }
-  .modal-content, .help-modal-content {
+  .modal-content, .help-modal-content, .settings-modal-content {
     max-width: 99vw !important;
     padding: 12px 3vw 10px 3vw;
   }
