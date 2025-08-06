@@ -6,9 +6,10 @@ let isShuffling = false;
 let seekbarTimer = null;
 let toDeleteIndex = null;
 
+// ここを新しいデフォルト曲ID＆仮タイトルに変更！
 const defaultVideo = {
-  id: "0IjFUvBLVHk",
-  title: "（デフォルト曲: 自動でタイトル取得）",
+  id: "wWV3rUzHbZ8",
+  title: "技能中、いちいち悲鳴あげる奴",
   author: ""
 };
 
@@ -187,7 +188,7 @@ function updateNowPlaying() {
   const titleElem = document.getElementById("nowPlayingTitle");
   titleElem.textContent = title;
   document.getElementById("nowPlayingChannel").textContent = author;
-  setTimeout(() => updateScrollTitle(), 300); // タイトルセット後に判定
+  setTimeout(() => updateScrollTitle(), 300);
 }
 
 function updateScrollTitle() {
