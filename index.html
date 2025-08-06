@@ -4,20 +4,33 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>My YouTube Music Player</title>
-  <!-- iPhoneホーム画面追加時にフルスクリーン化する！ -->
+  <!-- PWA対応 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="My YouTube Music Player">
-  <link rel="apple-touch-icon" href="./icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
+  <!-- 削除モーダル -->
   <div id="confirmDeleteModal" class="modal" style="display:none;">
     <div class="modal-content">
       <div>本当に削除しますか？</div>
       <div class="modal-btn-row">
         <button id="confirmDeleteYes">はい</button>
         <button id="confirmDeleteNo">いいえ</button>
+      </div>
+    </div>
+  </div>
+  <!-- 使い方モーダル -->
+  <div id="helpModal" class="modal" style="display:none;">
+    <div class="modal-content help-modal-content">
+      <div style="font-weight:bold;font-size:1.15em;margin-bottom:7px;">使い方</div>
+      <div id="helpTextArea" style="margin-bottom:15px;white-space:pre-wrap;max-height:120px;overflow:auto;"></div>
+      <video id="helpVideo1" controls width="100%" style="margin-bottom:12px;max-width:340px;"></video>
+      <video id="helpVideo2" controls width="100%" style="max-width:340px;"></video>
+      <div class="modal-btn-row" style="margin-top:13px;">
+        <button id="helpCloseBtn">閉じる</button>
       </div>
     </div>
   </div>
@@ -45,6 +58,7 @@
       <div class="like-row">
         <button class="like-btn" id="likeBtn">👍</button>
         <button class="dislike-btn" id="dislikeBtn">👎</button>
+        <button class="help-btn" id="helpBtn">❓</button>
       </div>
       <div class="seekbar-row">
         <span id="currentTime">0:00</span>
