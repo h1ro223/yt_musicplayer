@@ -1,1 +1,11 @@
-ここから https://h1ro223.github.io/yt_musicplayer/
+第3作 Youtube 音楽プレイヤー
+
+なんとYoutube Premiumに加入せずに
+バックグラウンド再生が可能です。手順は下のURLから動画を見てやってみてください
+これがアウトかは知りません、グレーゾーン？問題あれば消します。
+
+ChatGPTで作りました
+
+-------------------------------------
+
+サイトはここから https://h1ro223.github.io/yt_musicplayer/
